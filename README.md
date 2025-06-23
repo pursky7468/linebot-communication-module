@@ -1,6 +1,13 @@
-# LINE BOT 通訊模組
+# LINE BOT 通訊模組 ✅ 已驗證可正常運行
 
 基於 Clean Architecture 設計的 LINE BOT 通訊模組，專門負責與 LINE 平台的訊息收發功能。
+
+## 🎉 **狀態：已驗證可正常運行**
+
+✅ **測試通過日期**: 2025-06-23  
+✅ **收發功能**: 正常運作  
+✅ **訊息類型**: 文字訊息、圖片訊息  
+✅ **架構完整性**: Clean Architecture 實作完成  
 
 ## 🏗️ 架構設計
 
@@ -25,7 +32,7 @@
 - ✅ **依賴注入**：內建 DI 系統，易於測試
 - ✅ **擴展性**：預留支援其他訊息類型的架構
 
-## 🚀 快速開始
+## 🚀 快速開始 (已驗證流程)
 
 ### 1. 環境準備
 
@@ -50,48 +57,72 @@ pip install -r requirements.txt
 cp .env.example .env
 
 # 編輯 .env 檔案，填入您的 LINE BOT 設定
+# 重要：PORT 請設為 3000 (避免衝突)
 ```
 
-### 3. 啟動服務
+### 3. 啟動服務 (推薦方式)
 
 ```bash
-# 啟動 FastAPI 服務
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+# 使用快速啟動腳本 (已修正所有問題)
+python quick_start.py
+
+# 或使用修正版測試服務
+python fixed_test_bot.py
 ```
 
 ### 4. ngrok 設定 (開發用)
 
 ```bash
-# 啟動 ngrok
-ngrok http 8000
+# 啟動 ngrok (注意埠號為 3000)
+ngrok http 3000
 
 # 將產生的 URL 設定到 LINE Developers Console
+# 格式：https://your-ngrok-url.ngrok.io/api/v1/webhook
 ```
+
+## 🔧 重要修正記錄
+
+> 詳細修正內容請參閱 [FIXES.md](FIXES.md)
+
+### 主要修正項目：
+
+1. **埠號設定**：從 8000 改為 3000 (避免衝突)
+2. **環境變數載入**：修正 Pydantic Settings 設定錯誤
+3. **訊息轉換器**：修正 `MessageEvent.as_dict()` 不存在的問題
 
 ## 📖 API 文檔
 
 啟動服務後，可透過以下網址查看自動生成的 API 文檔：
 
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
+- **Swagger UI**: http://localhost:3000/docs
+- **ReDoc**: http://localhost:3000/redoc
 
-## 🧪 測試
+## 🧪 功能測試
+
+### 測試指令 (已驗證)
+
+向您的 LINE BOT 發送以下訊息進行測試：
+
+- `test` - 基本功能測試
+- `hello` - 打招呼測試
+- `help` - 查看所有指令
+- 傳送圖片 - 圖片處理測試
+
+### 預期回應
+
+```
+✅ LINE BOT 運作正常！
+🚀 收發功能測試成功！
+📅 時間: HH:MM:SS
+```
+
+## 🔍 問題診斷
+
+如果遇到問題，可以使用診斷工具：
 
 ```bash
-# 執行所有測試
-pytest
-
-# 執行測試並產生覆蓋率報告
-pytest --cov=linebot_module --cov-report=html
-
-# 執行型別檢查
-mypy linebot_module/
-
-# 執行程式碼格式化
-black linebot_module/
-
-# 執行程式碼風格檢查
-flake8 linebot_module/
+# 執行診斷腳本
+python diagnose.py
 ```
 
 ## 📞 使用方式
@@ -116,13 +147,40 @@ class MyMessageHandler(IMessageHandler):
 app.dependency_overrides[IMessageHandler] = lambda: MyMessageHandler()
 ```
 
+## 📁 專案檔案說明
+
+### 核心檔案
+- `main.py` - 主應用程式入口
+- `quick_start.py` - 快速啟動腳本 (推薦使用)
+- `fixed_test_bot.py` - 修正版測試服務
+- `diagnose.py` - 問題診斷工具
+
+### 設定檔案
+- `.env` - 環境變數設定 (需手動建立)
+- `.env.example` - 環境變數範本
+- `requirements.txt` - Python 依賴套件清單
+
+### 文檔檔案
+- `SETUP.md` - 詳細設定指南
+- `FIXES.md` - 修正記錄
+- `example_usage.py` - 使用範例
+
 ## 🔧 技術棧
 
 - **Web 框架**: FastAPI
 - **LINE SDK**: line-bot-sdk-python
-- **資料驗證**: Pydantic
+- **資料驗證**: Pydantic + pydantic-settings
+- **環境變數**: python-dotenv
 - **測試框架**: pytest
 - **程式碼品質**: black, flake8, mypy
+- **日誌**: loguru
+
+## ⚠️ 重要注意事項
+
+1. **埠號設定**: 請使用 3000，避免與其他服務衝突
+2. **ngrok 設定**: 確保使用 `ngrok http 3000`
+3. **Webhook URL**: 必須包含 `/api/v1/webhook` 路徑
+4. **環境變數**: 確保 `.env` 檔案正確設定 LINE BOT 資訊
 
 ## 📄 授權
 
@@ -134,4 +192,5 @@ MIT License
 
 ---
 
-**注意**: 此模組專門負責 LINE 平台通訊，業務邏輯請實作在外部模組中。
+**✅ 驗證狀態**: 此模組已通過完整測試，可正常運行  
+**🎯 用途**: 專門負責 LINE 平台通訊，業務邏輯請實作在外部模組中
